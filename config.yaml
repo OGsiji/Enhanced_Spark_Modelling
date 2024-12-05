@@ -1,0 +1,33 @@
+# config.yaml
+spark:
+  app_name: "TaskLogAnalysis"
+  master: "local[*]"  # Can be changed to cluster mode
+  
+data:
+  generator:
+    num_records: 1_000_000  # 1 million records by default
+    output_path: "./data/task_logs.parquet"
+    
+  input_path: "./data/task_logs.parquet"
+  output_path: "./data/processed_logs"
+
+logging:
+  level: "INFO"
+  file_path: "./logs/task_log_analysis.log"
+
+projects:
+  - "Software Development"
+  - "Marketing"
+  - "Sales"
+  - "Customer Support"
+  - "Product Management"
+  - "HR"
+  - "Finance"
+
+users:
+  - prefix: "user"
+  - count: 500  # Number of unique users to generate
+
+analytics:
+  kmeans_clusters: 3
+  duration_prediction: true
