@@ -30,4 +30,4 @@ myenv/
 src/config/.env
 *.__pycache__
 venv/
-data/
+data
