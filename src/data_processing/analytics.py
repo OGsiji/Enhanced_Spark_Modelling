@@ -22,9 +22,9 @@ class TaskLogAnalytics:
             DataFrame: Analytics results
         """
         try:
-
-            transformed_df.printSchema()
+            
             transformed_df.show(5)
+
             # Prepare features for clustering
             assembler = VectorAssembler(
                 inputCols=["total_hours", "avg_task_duration", "total_tasks"],
@@ -45,6 +45,8 @@ class TaskLogAnalytics:
             lr_model = lr.fit(lr_assembler.transform(transformed_df))
 
             self.logger.info("Completed advanced analytics")
+            transformed_df.show()
+
             return transformed_df
 
         except Exception as e:

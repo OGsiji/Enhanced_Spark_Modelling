@@ -39,17 +39,12 @@ class TaskLogTransformer:
                     count("task_id").alias("user_task_count")
                 ))
 
-            # Add a placeholder for user in project_summary if necessary
-            project_summary = project_summary.withColumn("user", when(col("project").isNotNull(), None))
-
-            # Join the two DataFrames
-            combined_summary = project_summary.join(user_productivity, "user", "outer")
 
             # Identify long-running tasks (more than 8 hours)
             long_running_tasks = df.filter(col("duration") > 8)
 
             self.logger.info("Completed log transformations successfully")
-            return combined_summary, long_running_tasks, project_summary
+            return  long_running_tasks, project_summary, user_productivity
 
         except Exception as e:
             self.logger.error(f"Transformation error: {e}")

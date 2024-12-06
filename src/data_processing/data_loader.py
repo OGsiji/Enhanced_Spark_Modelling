@@ -42,7 +42,7 @@ class TaskLogDataLoader:
         try:
             # Attempt to load data with predefined schema
             df = (self.spark.read
-                  .format("csv")  # or "parquet" depending on source
+                  .format("parquet")  # or "parquet" depending on source
                   .option("header", "true")
                   .option("mode", "DROPMALFORMED")  # Drop malformed records
                   .schema(self._define_schema())

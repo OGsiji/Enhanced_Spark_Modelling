@@ -57,9 +57,10 @@ def main():
         transformer = TaskLogTransformer()
         processed_logs = transformer.transform_logs(task_logs)
 
-        combined_summary, _, project_summary = processed_logs  # Unpack the tuple
+        long_running_tasks, project_summary, user_productivity = processed_logs  # Unpack the tuple
 
         project_summary.show()
+        user_productivity.show()
 
 
         # Perform analytics
