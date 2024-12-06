@@ -120,6 +120,10 @@ spark-submit src/main.py
 pytest tests/
 ```
 
+
+
+![Workflow records](images/analytics.png)
+
 ## 📊 Example Workflow
 
 1. **Data Generation**

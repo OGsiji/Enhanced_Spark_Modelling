@@ -29,4 +29,5 @@ temp_processed/
 myenv/
 src/config/.env
 *.__pycache__
-venv
+venv/
+data/

@@ -45,7 +45,6 @@ class TaskLogAnalytics:
             lr_model = lr.fit(lr_assembler.transform(transformed_df))
 
             self.logger.info("Completed advanced analytics")
-            transformed_df.show()
 
             return transformed_df
 
