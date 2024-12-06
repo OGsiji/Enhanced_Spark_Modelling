@@ -1,6 +1,13 @@
 import os
 import random
 from datetime import datetime, timedelta
+import sys
+
+# Add the project root directory to the Python path
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, project_root)
+
+
 from faker import Faker
 import pandas as pd
 import numpy as np
@@ -59,6 +66,8 @@ class TaskLogGenerator:
         
         return df
 
+
+
     def save_to_parquet(self, df):
         """
         Save generated dataframe to Parquet
@@ -66,6 +75,13 @@ class TaskLogGenerator:
         Args:
             df (pd.DataFrame): Task log dataframe
         """
+        # Ensure timestamp columns are in microsecond precision
+        timestamp_columns = ['start_time', 'end_time']
+        for col in timestamp_columns:
+            # Round to microseconds to avoid precision loss
+            df[col] = df[col].dt.floor('us')
+        
+        # Optional: You can also specify date_unit if needed
         df.to_parquet(self.output_path, index=False)
         print(f"Generated {len(df)} task log records at {self.output_path}")
 

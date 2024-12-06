@@ -1,7 +1,6 @@
-# src/data_processing/transformations.py
-import logging
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import col, sum, avg, max, min, count
+from pyspark.sql.functions import col, sum, avg, max, min, count, when
+import logging
 
 class TaskLogTransformer:
     def __init__(self):
@@ -13,10 +12,10 @@ class TaskLogTransformer:
         1. Aggregate hours by project
         2. Calculate user productivity
         3. Identify long-running tasks
-        
+
         Args:
             df (DataFrame): Input task log DataFrame
-        
+
         Returns:
             DataFrame: Transformed and enriched dataset
         """
@@ -35,16 +34,22 @@ class TaskLogTransformer:
             user_productivity = (df
                 .groupBy("user")
                 .agg(
-                    sum("duration").alias("total_hours"),
-                    avg("duration").alias("avg_task_duration"),
-                    count("task_id").alias("total_tasks")
+                    sum("duration").alias("total_user_hours"),
+                    avg("duration").alias("avg_user_task_duration"),
+                    count("task_id").alias("user_task_count")
                 ))
+
+            # Add a placeholder for user in project_summary if necessary
+            project_summary = project_summary.withColumn("user", when(col("project").isNotNull(), None))
+
+            # Join the two DataFrames
+            combined_summary = project_summary.join(user_productivity, "user", "outer")
 
             # Identify long-running tasks (more than 8 hours)
             long_running_tasks = df.filter(col("duration") > 8)
 
             self.logger.info("Completed log transformations successfully")
-            return project_summary.join(user_productivity, "user")
+            return combined_summary, long_running_tasks, project_summary
 
         except Exception as e:
             self.logger.error(f"Transformation error: {e}")

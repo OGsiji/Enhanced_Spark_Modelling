@@ -1,5 +1,6 @@
 import sys
 import logging
+import os
 from pyspark.sql import SparkSession
 from utils.config import load_config
 from utils.logging_config import setup_logging
@@ -56,9 +57,14 @@ def main():
         transformer = TaskLogTransformer()
         processed_logs = transformer.transform_logs(task_logs)
 
+        combined_summary, _, project_summary = processed_logs  # Unpack the tuple
+
+        project_summary.show()
+
+
         # Perform analytics
         analytics = TaskLogAnalytics()
-        results = analytics.analyze_task_logs(processed_logs)
+        results = analytics.analyze_task_logs(project_summary)
 
         # Write results
         results.write.mode("overwrite").parquet(config['data']['output_path'])

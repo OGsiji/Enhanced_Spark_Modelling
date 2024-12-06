@@ -22,6 +22,9 @@ class TaskLogAnalytics:
             DataFrame: Analytics results
         """
         try:
+
+            transformed_df.printSchema()
+            transformed_df.show(5)
             # Prepare features for clustering
             assembler = VectorAssembler(
                 inputCols=["total_hours", "avg_task_duration", "total_tasks"],
